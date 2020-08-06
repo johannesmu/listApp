@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React , {Component} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, TouchableOpacity } from 'react-native';
 
 import {Item} from './components/Item';
 
@@ -8,7 +8,6 @@ export default class App extends Component {
   state = {
     expenseAmount : 0,
     expenseCategory: '',
-    updating: false,
   }
   listData = []
 
