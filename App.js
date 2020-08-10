@@ -102,3 +102,16 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 })
+
+const pickerStyle = StyleSheet.create({
+  inputIOS: {
+    padding: 10,
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
+  inputAndroid: {
+    padding: 10,
+    borderColor: colors.primary,
+    borderWidth: 1,
+  }
+})
