@@ -30,7 +30,8 @@ export default class App extends Component {
           style={styles.input}
           placeholder="$ amount" 
           onChangeText={ text => this.setState({expenseAmount: parseFloat(text) }) } 
-          keyboardType="number-pad" />
+          keyboardType="number-pad" 
+          ref={(input) => ( this._textInput = input )}/>
         {/* <TextInput
           style={styles.input}
           placeholder="category"
@@ -41,6 +42,8 @@ export default class App extends Component {
             value = { this.state.expenseCategory }
             onValueChange = { value => this.setState({expenseCategory: value}) }
             useNativeAndroidPickerStyle = {false}
+            style={pickerStyle}
+            placeholder={pickerPlaceholder}
           />
         </View>
         {/* wrap the button in view */}
@@ -76,12 +79,19 @@ export default class App extends Component {
       category: this.state.expenseCategory
     }
     this.listData.push(listItem)
-    this.setState({expenseAmount:0})
+    this.setState({expenseAmount:0, expenseCategory: null })
+    this._textInput.clear()
+    this._textInput.focus()
   }
 }
 const colors = {
   primary : 'hsla(330, 38%, 65%, 1)'
 }
+
+const pickerPlaceholder = {
+  label: 'select category', value: null, color: 'black'
+}
+
 const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 10,
