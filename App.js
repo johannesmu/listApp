@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React , {Component} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TextInput, TouchableOpacity } from 'react-native';
-
+// third-party components
+import RNPickerSelect from 'react-native-picker-select';
+// custom components
 import {Item} from './components/Item';
 
 export default class App extends Component {
@@ -10,6 +12,14 @@ export default class App extends Component {
     expenseCategory: '',
   }
   listData = []
+
+  dropdownItems = [
+    { label: 'Food' , value: 'food' },
+    { label: 'Transport' , value: 'transport' },
+    { label: 'Rent' , value: 'rent' },
+    { label: 'Grocery' , value: 'grocery' },
+    { label: 'Entertainment' , value: 'entertainment' },
+  ]
 
   render() {
     return (
@@ -21,11 +31,17 @@ export default class App extends Component {
           placeholder="$ amount" 
           onChangeText={ text => this.setState({expenseAmount: parseFloat(text) }) } 
           keyboardType="number-pad" />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="category"
           onChangeText={ text => this.setState({ expenseCategory: text }) }
-        />
+        /> */}
+          <RNPickerSelect 
+            items = { this.dropdownItems }
+            value = { this.state.expenseCategory }
+            onValueChange = { value => this.setState({expenseCategory: value}) }
+            useNativeAndroidPickerStyle = {false}
+          />
         </View>
         {/* wrap the button in view */}
         <View>
@@ -33,7 +49,6 @@ export default class App extends Component {
             <Text style={styles.buttonText} >Add</Text>
           </TouchableOpacity>
         </View>
-        
         
         <FlatList 
           data = {this.listData}
