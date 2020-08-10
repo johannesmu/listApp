@@ -61,8 +61,6 @@ export default class App extends Component {
       category: this.state.expenseCategory
     }
     this.listData.push(listItem)
-    console.log('adding')
-    // this.setState({updating: true})
     this.setState({expenseAmount:0})
   }
 }
