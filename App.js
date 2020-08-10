@@ -90,7 +90,8 @@ export default class App extends Component {
       isNaN(this.state.expenseAmount) ||
       this.state.expenseAmount == 0 ||
       this.state.selectedCategory == ''
-    ) {
+    ) 
+    {
       return
     }
     let itemId = new Date().getTime().toString()
@@ -100,14 +101,14 @@ export default class App extends Component {
       category: this.state.selectedCategory,
     }
     this.listData.push(listItem)
-    this.setState({ expenseAmount: 0, selectedCategory: null })
+    this.setState({ expenseAmount: 0, selectedCategory: null, submitting: false })
     // we use the ref in TextInput to clear and focus it
     this._input.clear()
     this._input.focus()
   }
 
   verifyInput = () => {
-    console.log('...verifying')
+    // verify if input and dropdown have value, then change submitting state
     if( this.state.expenseAmount > 0 && this.state.selectedCategory ) {
       this.setState({submitting: true})
     }
