@@ -77,13 +77,14 @@ export default class App extends Component {
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
-
-        <FlatList
-          data={this.listData}
-          renderItem={this.renderList}
-          keyExtractor={(item) => item.id}
-          extraData={this.state.expenseAmount}
-        />
+        <View>
+          <FlatList
+            data={this.listData}
+            renderItem={this.renderList}
+            keyExtractor={(item) => item.id}
+            extraData={this.state.expenseAmount}
+          />
+        </View>
       </SafeAreaView>
     )
   }

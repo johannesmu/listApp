@@ -30,4 +30,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primaryDisabled,
     marginVertical: 15,
   },
+  listView: {
+    flex: 1,
+  },
 })
