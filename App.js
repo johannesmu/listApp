@@ -1,24 +1,27 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { Component } from 'react'
 import {
-  StyleSheet,
   Text,
   View,
   SafeAreaView,
   FlatList,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native'
-// third party components
+// third-party components
 import RNPickerSelect from 'react-native-picker-select'
 // custom components
 import { Item } from './components/Item'
+// stylesheets
+import {styles} from './styles/Main';
+import {pickerStyle} from './styles/Picker';
 
 export default class App extends Component {
   state = {
     expenseAmount: 0,
-    selectedCategory: '',
-    submitting: false,
+    expenseCategory: '',
+    validInput: false,
   }
 
   listData = []
@@ -26,10 +29,9 @@ export default class App extends Component {
   dropdownItems = [
     { label: 'Food', value: 'food' },
     { label: 'Transport', value: 'transport' },
-    { label: 'Grocery', value: 'grocery' },
-    { label: 'Utility', value: 'utility' },
-    { label: 'Fuel', value: 'fuel' },
     { label: 'Rent', value: 'rent' },
+    { label: 'Grocery', value: 'grocery' },
+    { label: 'Entertainment', value: 'entertainment' },
   ]
 
   render() {
@@ -41,44 +43,49 @@ export default class App extends Component {
             style={styles.input}
             placeholder="$ amount"
             onChangeText={(text) =>
-              this.setState({ expenseAmount: parseFloat(text) }, () => {this.verifyInput()} )
+              this.setState({ expenseAmount: parseFloat(text) }, () => {
+                this.validate()
+              })
             }
             keyboardType="number-pad"
-            // ref is used to create reference to this component
-            ref={(exp) => (this._input = exp)}
+            ref={(input) => (this._textInput = input)}
           />
-          {/* <TextInput
-          style={styles.input}
-          placeholder="category"
-          onChangeText={ text => this.setState({ expenseCategory: text }) }
-        /> */}
           <RNPickerSelect
-            onValueChange={(value) => {
-              this.setState({ selectedCategory: value }, () => {this.verifyInput()} )
-            }}
             items={this.dropdownItems}
-            style={picker}
-            value={this.state.selectedCategory}
-            placeholder={placeholder}
+            value={this.state.expenseCategory}
+            onValueChange={(value) =>
+              this.setState({ expenseCategory: value }, () => {
+                this.validate()
+              })
+            }
             useNativeAndroidPickerStyle={false}
+            style={pickerStyle}
+            placeholder={pickerPlaceholder}
           />
         </View>
         {/* wrap the button in view */}
-        <View style={styles.main}>
-          <TouchableOpacity 
-            style={ this.state.submitting ? styles.button : styles.buttonDisabled } 
-            onPress={this.addItem} 
-            disabled={ !this.state.submitting ? true : false }>
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={
+              [
+                this.state.validInput ? styles.button : styles.buttonDisabled,
+                {borderRadius: 10}
+              ]
+            }
+            onPress={this.addItem}
+            disabled={!this.state.validInput ? true : false}
+          >
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
-
-        <FlatList
-          data={this.listData}
-          renderItem={this.renderList}
-          keyExtractor={(item) => item.id}
-          extraData={this.state.expenseAmount}
-        />
+        <View>
+          <FlatList
+            data={this.listData}
+            renderItem={this.renderList}
+            keyExtractor={(item) => item.id}
+            extraData={this.state.expenseAmount}
+          />
+        </View>
       </SafeAreaView>
     )
   }
@@ -89,80 +96,36 @@ export default class App extends Component {
     if (
       isNaN(this.state.expenseAmount) ||
       this.state.expenseAmount == 0 ||
-      this.state.selectedCategory == ''
-    ) 
-    {
+      this.state.expenseCategory == ''
+    ) {
       return
     }
     let itemId = new Date().getTime().toString()
     let listItem = {
       id: itemId,
       amount: this.state.expenseAmount,
-      category: this.state.selectedCategory,
+      category: this.state.expenseCategory,
     }
     this.listData.push(listItem)
-    this.setState({ expenseAmount: 0, selectedCategory: null, submitting: false })
-    // we use the ref in TextInput to clear and focus it
-    this._input.clear()
-    this._input.focus()
+    this.setState({
+      expenseAmount: 0,
+      expenseCategory: null,
+      validInput: false,
+    })
+    this._textInput.clear()
+    this._textInput.focus()
   }
 
-  verifyInput = () => {
-    // verify if input and dropdown have value, then change submitting state
-    if( this.state.expenseAmount > 0 && this.state.selectedCategory ) {
-      this.setState({submitting: true})
+  validate = () => {
+    if (this.state.expenseAmount > 0 && this.state.expenseCategory) {
+      this.setState({ validInput: true })
     }
   }
 }
 
-// theme colors
-const colors = {
-  primary: 'hsla(330, 38%, 65%, 1)',
-  primaryDisabled: 'hsla(330, 38%, 80%, 1)',
+const pickerPlaceholder = {
+  label: 'select category',
+  value: null,
+  color: 'black',
 }
-//default for dropdown
-const placeholder = { label: 'pick a type', value: null, color: 'black' }
 
-
-const styles = StyleSheet.create({
-  main: {
-    paddingHorizontal: 10,
-  },
-  input: {
-    width: '100%',
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1,
-    marginVertical: 15,
-  },
-  button: {
-    padding: 10,
-    backgroundColor: colors.primary,
-    marginVertical: 15,
-  },
-  buttonDisabled: {
-    padding: 10,
-    backgroundColor: colors.primaryDisabled,
-    marginVertical: 15,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-})
-
-const picker = StyleSheet.create({
-  inputIOS: {
-    padding: 10,
-    borderColor: colors.primary,
-    borderWidth: 1,
-    minWidth: '100%',
-  },
-  inputAndroid: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    paddingRight: 30,
-  },
-})
