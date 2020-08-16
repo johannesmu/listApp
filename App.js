@@ -7,7 +7,6 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  Platform,
 } from 'react-native'
 // third-party components
 import RNPickerSelect from 'react-native-picker-select'
@@ -106,7 +105,11 @@ export default class App extends Component {
       amount: this.state.expenseAmount,
       category: this.state.expenseCategory,
     }
+    //push adds new item at the end
     this.listData.push(listItem)
+    //unshift adds new item at the beginning (slower)
+    //sort the array
+    this.sortList()
     this.setState({
       expenseAmount: 0,
       expenseCategory: null,
@@ -120,6 +123,19 @@ export default class App extends Component {
     if (this.state.expenseAmount > 0 && this.state.expenseCategory) {
       this.setState({ validInput: true })
     }
+  }
+
+  sortList = () => {
+    // sort receives two items at a time and compares item1 and item2.
+    // it returns positive, negative or 0
+    this.listData.sort( (item1, item2) => {
+      //for ascending, return item1.id - item2.id
+      return item2.id - item1.id
+    } )
+  }
+
+  deleteItem = ( id ) => {
+    // delete an item from the array using the id
   }
 }
 
