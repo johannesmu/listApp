@@ -89,7 +89,7 @@ export default class App extends Component {
     )
   }
   renderList = ({ item }) => (
-    <Item amount={item.amount} category={item.category} id={item.id} />
+    <Item amount={item.amount} category={item.category} id={item.id} delete={this.deleteItem} />
   )
   addItem = () => {
     if (
@@ -134,8 +134,15 @@ export default class App extends Component {
     } )
   }
 
-  deleteItem = ( id ) => {
+  deleteItem = ( itemId ) => {
     // delete an item from the array using the id
+    this.listData.forEach((item,index) => {
+      if( item.id == itemId ) {
+        this.listData.splice( index, 1)
+      }
+    })
+    // trigger flatlist to render
+    this.setState({expenseAmount: 0})
   }
 }
 

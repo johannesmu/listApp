@@ -10,7 +10,7 @@ export const Item = ( props ) => {
         <Text style={itemStyles.text}>{props.category}</Text>
         <Text style={itemStyles.text}>${props.amount}</Text>
       </View>
-      <TouchableOpacity style={itemStyles.button}>
+      <TouchableOpacity style={itemStyles.button} onPress={() => {props.delete(props.id)} }>
         <Text style={itemStyles.buttonText}>X</Text>
       </TouchableOpacity>
     </View>
