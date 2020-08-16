@@ -36,7 +36,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex:1}}>
         <View style={styles.main}>
           <Text>Add your expense</Text>
           <TextInput
@@ -78,7 +78,7 @@ export default class App extends Component {
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <View style={{flex:1,}}>
           <FlatList
             data={this.listData}
             renderItem={this.renderList}
@@ -90,7 +90,7 @@ export default class App extends Component {
     )
   }
   renderList = ({ item }) => (
-    <Item amount={item.amount} category={item.category} />
+    <Item amount={item.amount} category={item.category} id={item.id} />
   )
   addItem = () => {
     if (
