@@ -28,6 +28,7 @@ export default class App extends Component {
     expenseAmount: 0,
     expenseCategory: '',
     validInput: false,
+    showToast: false,
   }
   listData = []
 
@@ -41,7 +42,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flex:1, position: 'relative'}}>
         <View style={styles.main}>
           <Text>Add your expense</Text>
           <TextInput
@@ -83,6 +84,11 @@ export default class App extends Component {
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
+        <View style={[{
+          display: this.state.showToast ? 'flex' : 'none'
+        }, styles.toast ]}>
+          <Text style={styles.toastMessage}>Item deleted</Text>
+        </View>
         <View style={{flex:1}}>
           <FlatList
             data={this.listData}
@@ -114,6 +120,7 @@ export default class App extends Component {
         this.listData.splice( index, 1 )
       }
     } )
+    this.showToast()
     this.saveList()
     this.setState({expenseAmount:0})
   }
@@ -180,6 +187,14 @@ export default class App extends Component {
     catch(error) {
       console.log(error)
     }
+  }
+
+  showToast = () => {
+    this.setState({showToast: true })
+    const timer = setTimeout( 
+      () => { this.setState({showToast: false }) },
+      3000 
+    )
   }
 }
 

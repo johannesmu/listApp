@@ -34,4 +34,17 @@ export const styles = StyleSheet.create({
   listView: {
     flex: 1,
   },
+  toast: {
+    backgroundColor: 'black',
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    padding: 5,
+    borderRadius: 5,
+  },
+  toastMessage: {
+    color: 'white',
+    textAlign: 'center',
+  },
 })
