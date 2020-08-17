@@ -2,6 +2,10 @@ import {StyleSheet,Platform} from 'react-native';
 import {colors} from './Colors';
 
 export const styles = StyleSheet.create({
+  safeView: {
+    position: 'relative',
+    flex: 1,
+  },
   main: {
     paddingHorizontal: 10,
     // using Platform module: if android, add 25 to clear the status bar
@@ -34,4 +38,16 @@ export const styles = StyleSheet.create({
   listView: {
     flex: 1,
   },
+  modalView: {
+    position: 'absolute',
+    top: 150,
+    left:20,
+    right:20,
+    top:100,
+    bottom: 200,
+    backgroundColor: 'lightblue',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 })

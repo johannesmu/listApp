@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  Button,
 } from 'react-native'
 // third-party components
 import RNPickerSelect from 'react-native-picker-select'
@@ -21,6 +22,7 @@ export default class App extends Component {
     expenseAmount: 0,
     expenseCategory: '',
     validInput: false,
+    showModal: false,
   }
 
   listData = []
@@ -35,7 +37,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={styles.safeView}>
         <View style={styles.main}>
           <Text>Add your expense</Text>
           <TextInput
@@ -76,6 +78,9 @@ export default class App extends Component {
           >
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={()=>{this.toggleModal()}}>
+            <Text>Show Modal</Text>
+          </TouchableOpacity>
         </View>
         <View style={{flex:1,}}>
           <FlatList
@@ -84,6 +89,10 @@ export default class App extends Component {
             keyExtractor={(item) => item.id}
             extraData={this.state.expenseAmount}
           />
+        </View>
+        <View style={[styles.modalView, {display: this.state.showModal ? 'flex' : 'none'} ]}>
+          <Text>Modal</Text>
+          <Button title="close" onPress={()=>{this.toggleModal() }}/>
         </View>
       </SafeAreaView>
     )
@@ -141,8 +150,16 @@ export default class App extends Component {
         this.listData.splice( index, 1)
       }
     })
-    // trigger flatlist to render
+    // trigger flatlist to render new content
     this.setState({expenseAmount: 0})
+  }
+  toggleModal = () => {
+    if(this.state.showModal == false ) {
+      this.setState({showModal: true})
+    }
+    else{
+      this.setState({showModal: false})
+    }
   }
 }
 
