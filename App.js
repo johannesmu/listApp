@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  AsyncStorage,
 } from 'react-native'
 // third-party components
 import RNPickerSelect from 'react-native-picker-select'
@@ -34,6 +35,10 @@ export default class App extends Component {
     { label: 'Grocery', value: 'grocery' },
     { label: 'Entertainment', value: 'entertainment' },
   ]
+
+  componentDidMount() {
+    this.loadData();
+  }
 
   render() {
     return (
@@ -119,6 +124,7 @@ export default class App extends Component {
     //unshift adds new item at the beginning (slower)
     //sort the array
     this.sortList()
+    this.storeData()
     this.setState({
       expenseAmount: 0,
       expenseCategory: null,
@@ -152,7 +158,49 @@ export default class App extends Component {
     })
     // trigger flatlist to render new content
     this.setState({expenseAmount: 0})
+    this.storeData()
   }
+
+  storeData = async () => {
+    try {
+      await AsyncStorage.setItem(
+        'listItems',
+        JSON.stringify(this.listData)
+      );
+    } catch (error) {
+      // Error saving data
+      console.log(error)
+    }
+  }
+
+  loadData = async () => {
+    try {
+      let items = await AsyncStorage.getItem('listItems')
+      // set listData to retrieved value
+      this.listData = JSON.parse( items )
+      // trigger FlatList render
+      this.setState({expenseAmount: 0})
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  // getTotalsOfCategories = () => {
+  //   let totals = []
+  //   this.dropdownItems.forEach((category) => {
+  //     let categoryAmounts = this.listData.filter((item)=>{
+  //       if( item.category == category ) {
+  //         return item.category
+  //       }
+  //     })
+  //     totals[category] = categoryAmounts.reduce( (categoryTotal, value) => {
+  //       return categoryTotal + value
+  //     })
+  //   })
+  //   return totals;
+  // }
+
   toggleModal = () => {
     if(this.state.showModal == false ) {
       this.setState({showModal: true})
