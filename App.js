@@ -17,6 +17,12 @@ import { Item } from './components/Item'
 import {styles} from './styles/Main';
 import {pickerStyle} from './styles/Picker';
 
+const pickerPlaceholder = {
+  label: 'select a category',
+  value: null,
+  color: 'black',
+}
+
 export default class App extends Component {
   state = {
     expenseAmount: 0,
@@ -122,9 +128,5 @@ export default class App extends Component {
   }
 }
 
-const pickerPlaceholder = {
-  label: 'select category',
-  value: null,
-  color: 'black',
-}
+
 
