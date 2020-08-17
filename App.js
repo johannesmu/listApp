@@ -29,6 +29,7 @@ export default class App extends Component {
     expenseCategory: '',
     validInput: false,
     showToast: false,
+    message: '',
   }
   listData = []
 
@@ -87,7 +88,7 @@ export default class App extends Component {
         <View style={[{
           display: this.state.showToast ? 'flex' : 'none'
         }, styles.toast ]}>
-          <Text style={styles.toastMessage}>Item deleted</Text>
+          <Text style={styles.toastMessage}>{this.state.message}</Text>
         </View>
         <View style={{flex:1}}>
           <FlatList
@@ -120,7 +121,7 @@ export default class App extends Component {
         this.listData.splice( index, 1 )
       }
     } )
-    this.showToast()
+    this.showToast('item deleted', 2000 )
     this.saveList()
     this.setState({expenseAmount:0})
   }
@@ -150,6 +151,7 @@ export default class App extends Component {
     })
     this._textInput.clear()
     this._textInput.focus()
+    this.showToast('item added', 1500 )
   }
 
   validate = () => {
@@ -189,11 +191,13 @@ export default class App extends Component {
     }
   }
 
-  showToast = () => {
-    this.setState({showToast: true })
+  showToast = ( message, duration ) => {
+    this.setState({message: message }, 
+      () => { this.setState({showToast: true}) }
+    )
     const timer = setTimeout( 
       () => { this.setState({showToast: false }) },
-      3000 
+      duration 
     )
   }
 }
