@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native'
 // third-party components
 import RNPickerSelect from 'react-native-picker-select'
@@ -93,9 +94,30 @@ export default class App extends Component {
       </SafeAreaView>
     )
   }
+
+  componentDidMount() {
+    this.loadList()
+  }
+
   renderList = ({ item }) => (
-    <Item amount={item.amount} category={item.category} />
+    <Item 
+      amount={item.amount} 
+      category={item.category} 
+      id={item.id} 
+      delete={ this.removeItem }
+    />
   )
+
+  removeItem = (itemId) => {
+    this.listData.forEach( (item,index) => {
+      if (item.id == itemId) {
+        this.listData.splice( index, 1 )
+      }
+    } )
+    this.saveList()
+    this.setState({expenseAmount:0})
+  }
+
   addItem = () => {
     if (
       isNaN(this.state.expenseAmount) ||
@@ -113,6 +135,7 @@ export default class App extends Component {
     this.listData.push(listItem)
     // sort list in descending order
     this.sortList()
+    this.saveList()
     this.setState({
       expenseAmount: 0,
       expenseCategory: null,
@@ -132,6 +155,29 @@ export default class App extends Component {
     this.listData.sort( (item1,item2) => {
       return item2.id - item1.id
     } )
+  }
+
+  saveList = async () => {
+    try {
+      await AsyncStorage.setItem(
+        'data',
+        JSON.stringify(this.listData)
+      )
+    }
+    catch( error ) {
+      console.log(error)
+    }
+  }
+
+  loadList = async () => {
+    try{
+      let items = await AsyncStorage.getItem('data')
+      this.listData = JSON.parse( items )
+      this.setState({expenseAmount:0})
+    }
+    catch(error) {
+      console.log(error)
+    }
   }
 }
 
